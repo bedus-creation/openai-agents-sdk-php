@@ -11,17 +11,18 @@ class OpenAIResponsesModel implements Model
         public Client $client,
     ) {}
 
-    public function getResponse()
-    {
-        $inputJson = json_encode(
-            list_input,
-            indent = 2,
-            ensure_ascii = false,
-        );
-
-        $this->client->responses->create(
+    public function getResponse(
+        string|null $instructions,
+        array|string $input,
+        ModelSettings $modelSettings,
+        array $tools,
+    ) {
+        return $this->client->responses->create(
             model: $this->model,
-            input = list_input,
+            instructions: $instructions,
+            input: $input,
+            tools: $tools,
+            temperature: $modelSettings->temperature,
         );
     }
 }

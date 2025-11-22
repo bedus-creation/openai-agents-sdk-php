@@ -10,14 +10,16 @@ class Client
 {
     use ResponseHandler;
 
-    protected Http $http;
+    protected $http;
 
     public function __construct(
         public string $url,
         public string|null $apiKey = null,
     ) {
-        $this->http      = (new Http());
-        dd($this->http);
+        $this->http = (new Http())
+            ->baseUrl($this->url)
+            ->withToken(Config::getApiKey());
+
         $this->responses = new Responses($this->http);
     }
 }

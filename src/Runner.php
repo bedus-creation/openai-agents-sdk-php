@@ -2,8 +2,10 @@
 
 namespace JoBins\Agents;
 
+use JoBins\Agents\Agents\Agent;
+use JoBins\Agents\Helpers\InputHelper;
 use JoBins\Agents\Memory\Session;
-use JoBins\Agents\Models\OpenAIResponsesModel;
+use JoBins\Agents\Providers\OpenAI\Config;
 
 class Runner
 {
@@ -22,18 +24,25 @@ class Runner
     ) {
         $runner = new self($agent, $input, $conversationId, $session);
 
-        $runner->runSingleTurn($agent);
+        return $runner->runSingleTurn($agent, $input);
     }
 
     private function runSingleTurn(
         Agent $agent,
+        string|array $originalInput,
     ) {
-        $model = $this->getModel();
-        $model->getResponse();
+        $input = InputHelper::inputList($originalInput);
+
+        return $this->getModel()->getResponse(
+            instructions: $agent->instructions,
+            input: $input,
+            modelSettings: $agent->modelSettings,
+            tools: $agent->tools
+        );
     }
 
-    public function getModel()
+    public function getModel(): Models\Model
     {
-        return new OpenAIResponsesModel();
+        return Config::getModel($this->agent->model);
     }
 }

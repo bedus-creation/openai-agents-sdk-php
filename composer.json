@@ -16,6 +16,7 @@
         "phpunit/phpunit": "^12.4"
     },
     "require": {
-        "illuminate/http": "^12.39"
+        "illuminate/http": "^12.39",
+        "vlucas/phpdotenv": "^5.6"
     }
 }

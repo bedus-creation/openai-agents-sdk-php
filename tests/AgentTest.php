@@ -2,8 +2,8 @@
 
 namespace JoBins\Agents\Test;
 
-use JoBins\Agents\Agent;
-use JoBins\Agents\Test\Fixtures\FetchWeather;
+use JoBins\Agents\Agents\Agent;
+use JoBins\Agents\Test\Fixtures\Fixtures\FetchWeather;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 

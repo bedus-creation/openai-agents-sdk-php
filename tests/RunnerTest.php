@@ -2,24 +2,25 @@
 
 namespace JoBins\Agents\Test;
 
-use JoBins\Agents\Agent;
+use JoBins\Agents\Agents\Agent;
+use JoBins\Agents\Providers\OpenAI\Config;
 use JoBins\Agents\Runner;
-use JoBins\Agents\Test\Fixtures\FetchWeather;
+use JoBins\Agents\Test\Fixtures\Fixtures\FetchWeather;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\TestCase;
 
 class RunnerTest extends TestCase
 {
     #[Test]
     public function itRuns()
     {
+        Config::useApiKey(env('OPENAI_API_KEY'));
+
         $agent = new Agent(
             name: "Assistant",
             instructions: "You are a helpful assistant"
         );
 
-        $results = Runner::run(agent: $agent, input: "Hello world!");
-        print_r($results);
+        Runner::run(agent: $agent, input: "Hello!");
     }
 
     public function itRunsWithMemory()
