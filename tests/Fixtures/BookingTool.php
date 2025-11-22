@@ -5,14 +5,14 @@ namespace JoBins\Agents\Test\Fixtures;
 use JoBins\Agents\Tools\Response;
 use JoBins\Agents\Tools\Tool;
 
-class ResumeParserTool extends Tool
+class BookingTool extends Tool
 {
     function schema(): string
     {
-       return ResumeSchema::class;
+       return RefundSchema::class;
     }
 
-    function handle(ResumeSchema $schema): array|Response
+    function handle(RefundSchema $schema): array|Response
     {
 
     }

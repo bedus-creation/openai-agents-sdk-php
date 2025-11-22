@@ -1,24 +1,7 @@
-# OpenAI Agents PHP
-
-### Getting Started
-```php
 <?php
 
-use JoBins\Agents\Providers\OpenAI\Config;
+namespace JoBins\Agents\Test\Fixtures;
 
-Config::useApiKey('YOUR_API_TOKEN');
-
-$agent = \JoBins\Agents\Agent(
-    name: "Assistant", 
-    instructions: "You are assistant"
-);
-
-\JoBins\Agents\Runner::run($agent, "Hello");
-```
-
-### Tools
-
-```php
 use JoBins\Agents\Agents\Agent;
 
 class CustomerFacingAgent extends Agent
@@ -33,9 +16,8 @@ class CustomerFacingAgent extends Agent
                 TEXT,
             tools: [
                 BookingTool::class,
-                RefundTool::class
+                RefundSchema::class
             ]
         );
     }
 }
-```
