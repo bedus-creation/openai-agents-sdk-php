@@ -2,7 +2,7 @@
 
 namespace JoBins\Agents\Tools;
 
-use JoBins\Agents\Test\Fixtures\ResumeSchema;
+use JoBins\Agents\Test\Fixtures\RefundSchema;
 
 /**
  * @template T extends Schema
@@ -20,9 +20,9 @@ abstract class Tool
     abstract function schema(): string;
 
     /**
-     * @param T|ResumeSchema $schema
+     * @param T|RefundSchema $schema
      *
      * @return array| Response
      */
-    abstract function handle(ResumeSchema $schema): array|Response;
+    abstract function handle(RefundSchema $schema): array|Response;
 }
