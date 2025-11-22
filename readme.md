@@ -39,3 +39,33 @@ class CustomerFacingAgent extends Agent
     }
 }
 ```
+
+Define the Schema
+
+```php
+class RefundSchema extends Schema
+{
+    #[Field(description: "The name of the person to refund.", format: 'email', minLength: 1, maxLength: 100)]
+    public string $name;
+
+    #[Field(description: "The number of items to refund.")]
+    public ?int $count;
+}
+```
+
+Attach the schema in the tool
+```php
+
+class RefundTool
+{
+    function schema(): string
+    {
+        return RefundSchema::class;
+    }
+
+    function handle(RefundSchema $schema): array|Response
+    {
+
+    }
+}
+```
