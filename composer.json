@@ -1,0 +1,21 @@
+{
+    "name": "jobins/openai-agents-php",
+    "autoload": {
+        "psr-4": {
+            "JoBins\\Agents\\": "src/",
+            "JoBins\\Agents\\Test\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Bedram Tamang",
+            "email": "tmgbedu@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^12.4"
+    },
+    "require": {
+        "illuminate/http": "^12.39"
+    }
+}
