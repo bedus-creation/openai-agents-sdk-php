@@ -2,10 +2,11 @@
 
 namespace JoBins\Agents\Tools;
 
-use JoBins\Agents\Test\Fixtures\RefundSchema;
+use JoBins\Agents\Schema\Schema;
+use JoBins\Agents\Schema\SchemaInterface;
 
 /**
- * @template T extends Schema
+ * @template T of SchemaInterface
  */
 abstract class Tool
 {
@@ -20,9 +21,9 @@ abstract class Tool
     abstract function schema(): string;
 
     /**
-     * @param T|RefundSchema $schema
+     * @param T $schema
      *
      * @return array| Response
      */
-    abstract function handle(RefundSchema $schema): array|Response;
+    abstract function handle($schema): array|Response;
 }

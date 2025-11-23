@@ -1,4 +1,15 @@
+> ⚠️ This package is in an early development phase. Feedback and contributions are welcome.
+
 # OpenAI Agents PHP
+OpenAI Agents PHP is a lightweight SDK for building AI agents and tool-driven workflows in PHP.
+It provides a simple architecture for defining agents, attaching custom tools, validating structured inputs with schemas, and executing conversations powered by OpenAI models.
+
+### Features
+- [x] Agent
+- [x] Runner
+- [ ] Tools
+- [ ] Structure Response
+- [ ] Memory
 
 ### Getting Started
 ```php

@@ -1,6 +1,6 @@
 <?php
 
-namespace JoBins\Agents\Attributes;
+namespace JoBins\Agents\Schema\Attributes;
 
 use Attribute;
 
@@ -9,9 +9,6 @@ class Field
 {
     public function __construct(
         public ?string $description = null,
-        public ?string $format = null,
-        public ?int $minLength = null,
-        public ?int $maxLength = null,
     ) {
     }
 }
