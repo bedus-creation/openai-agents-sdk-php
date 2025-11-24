@@ -16,4 +16,8 @@ class UserCreateSchema extends Schema
     #[Field(description: "Email of the person")]
     #[Format('email')]
     public ?int $email;
+
+    #[Field(description: "Password")]
+    #[Size(min: 1, max: 50)]
+    public string $password;
 }
