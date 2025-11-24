@@ -2,65 +2,81 @@
 
 namespace JoBins\Agents\Schema;
 
+use Illuminate\JsonSchema\Types\ObjectType;
+use Illuminate\JsonSchema\Types\IntegerType;
+use Illuminate\JsonSchema\Types\StringType;
+use Illuminate\JsonSchema\Types\Type;
 use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionProperty;
 
 class Schema implements SchemaInterface
 {
-    public static function toJsonSchema(): array
+    public static function getProperties(): Type
     {
-        $class = new ReflectionClass(static::class);
+        $class      = new ReflectionClass(static::class);
         $properties = $class->getProperties(ReflectionProperty::IS_PUBLIC);
 
-        $schema = [
-            'type' => 'object',
-            'properties' => [],
-            'required' => [],
-        ];
-
+        $propertiesTypes = [];
+        $required = [];
         foreach ($properties as $property) {
-            $type = self::getPropertyType($property);
+            $type       = self::getPropertyType($property);
             $attributes = $property->getAttributes();
-            dd($type, $attributes[0]->newInstance());
 
-            $fieldSchema = ['type' => $type];
+            $propertiesTypes[$property->getName()] = (new AttributerParser($type, $attributes))->parse();
 
-            if (! empty($attributes)) {
-                $fieldAttribute = $attributes[0]->newInstance();
-                if ($fieldAttribute->description) {
-                    $fieldSchema['description'] = $fieldAttribute->description;
-                }
-                if ($fieldAttribute->format) {
-                    $fieldSchema['format'] = $fieldAttribute->format;
-                }
-                if ($fieldAttribute->minLength) {
-                    $fieldSchema['minLength'] = $fieldAttribute->minLength;
-                }
-                if ($fieldAttribute->maxLength) {
-                    $fieldSchema['maxLength'] = $fieldAttribute->maxLength;
-                }
-            }
-
-            $schema['properties'][$property->getName()] = $fieldSchema;
-
-            if (! $property->getType()->allowsNull()) {
-                $schema['required'][] = $property->getName();
+            // Determine required: non-nullable properties are required
+            $refType = $property->getType();
+            if ($refType instanceof ReflectionNamedType && !$refType->allowsNull()) {
+                $required[] = $property->getName();
             }
         }
 
-        return $schema;
+        $object = ObjectType::object($propertiesTypes);
+        // The illuminate/json-schema library models `required` on a per-property basis.
+        // Mark each non-nullable property as required on its Type instance.
+        if (!empty($required)) {
+            foreach ($required as $propName) {
+                if (isset($propertiesTypes[$propName]) && $propertiesTypes[$propName] instanceof Type) {
+                    $propertiesTypes[$propName]->required(true);
+                }
+            }
+        }
+
+        return $object;
     }
 
-    protected static function getPropertyType(ReflectionProperty $property): string
+    protected static function getPropertyType(ReflectionProperty $property): string|Type
     {
         $type = $property->getType();
 
-        if (! $type instanceof ReflectionNamedType) {
+        if (!$type instanceof ReflectionNamedType) {
             return 'string';
         }
 
-        return match ($type->getName()) {
+        $typeName = $type->getName();
+
+        if (is_subclass_of($typeName, Schema::class)) {
+            return $typeName::getProperties();
+        }
+
+        if (enum_exists($typeName)) {
+            $cases = $typeName::cases();
+
+            if (is_subclass_of($typeName, \BackedEnum::class)) {
+                $values = array_map(fn (\BackedEnum $case) => $case->value, $cases);
+                $typeInstance = is_string($values[0]) ? new StringType() : new IntegerType();
+            } else {
+                $values = array_map(fn (\UnitEnum $case) => $case->name, $cases);
+                $typeInstance = new StringType();
+            }
+
+            $typeInstance->enum($values);
+
+            return $typeInstance;
+        }
+
+        return match ($typeName) {
             'int' => 'integer',
             'bool' => 'boolean',
             'float' => 'number',

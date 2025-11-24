@@ -5,11 +5,12 @@ namespace JoBins\Agents\Schema\Attributes;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-class Field
+class Enum
 {
+    /**
+     * @param array<int, string|int> $values
+     */
     public function __construct(
-        public ?string $name = null,
-        public ?string $description = null,
-    ) {
-    }
+        public array $values
+    ) {}
 }

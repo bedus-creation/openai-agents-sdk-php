@@ -1,0 +1,118 @@
+{
+    "id": "resp_06d05c96b4cc27ce0069276d8b78a4819480a98f3b9fc8feea",
+    "object": "response",
+    "created_at": 1764191627,
+    "status": "completed",
+    "background": false,
+    "billing": {
+        "payer": "developer"
+    },
+    "error": null,
+    "incomplete_details": null,
+    "instructions": "Handle all direct user communication.\nCall the relevant tools when specialized expertise is needed.",
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "model": "gpt-5.1-2025-11-13",
+    "output": [
+        {
+            "id": "msg_06d05c96b4cc27ce0069276d8c13008194a2bc96c82fd2e005",
+            "type": "message",
+            "status": "completed",
+            "content": [
+                {
+                    "type": "output_text",
+                    "annotations": [],
+                    "logprobs": [],
+                    "text": "Hello!\n\nHow can I help you today?"
+                }
+            ],
+            "role": "assistant"
+        }
+    ],
+    "parallel_tool_calls": true,
+    "previous_response_id": null,
+    "prompt_cache_key": null,
+    "prompt_cache_retention": null,
+    "reasoning": {
+        "effort": "none",
+        "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "store": true,
+    "temperature": 1.0,
+    "text": {
+        "format": {
+            "type": "text"
+        },
+        "verbosity": "medium"
+    },
+    "tool_choice": "auto",
+    "tools": [
+        {
+            "type": "function",
+            "description": null,
+            "name": "password_update_tool",
+            "parameters": {
+                "properties": {
+                    "password": {
+                        "minLength": 8,
+                        "type": "string"
+                    },
+                    "confirmPassword": {
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["password", "confirmPassword"]
+            },
+            "strict": true
+        },
+        {
+            "type": "function",
+            "description": null,
+            "name": "user_create_tool",
+            "parameters": {
+                "properties": {
+                    "name": {
+                        "description": "Fullname of the user",
+                        "minLength": 1,
+                        "maxLength": 50,
+                        "type": "string"
+                    },
+                    "email": {
+                        "description": "Email of the person",
+                        "type": "string"
+                    },
+                    "password": {
+                        "description": "Password",
+                        "minLength": 1,
+                        "maxLength": 50,
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["name", "email", "password"]
+            },
+            "strict": true
+        }
+    ],
+    "top_logprobs": 0,
+    "top_p": 1.0,
+    "truncation": "disabled",
+    "usage": {
+        "input_tokens": 135,
+        "input_tokens_details": {
+            "cached_tokens": 0
+        },
+        "output_tokens": 20,
+        "output_tokens_details": {
+            "reasoning_tokens": 0
+        },
+        "total_tokens": 155
+    },
+    "user": null,
+    "metadata": []
+}

@@ -17,6 +17,7 @@
     },
     "require": {
         "illuminate/http": "^12.39",
-        "vlucas/phpdotenv": "^5.6"
+        "vlucas/phpdotenv": "^5.6",
+        "illuminate/json-schema": "^12.39"
     }
 }

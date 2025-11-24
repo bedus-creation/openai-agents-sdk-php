@@ -2,7 +2,7 @@
 
 namespace JoBins\Agents\Providers\OpenAI;
 
-use Illuminate\Http\Client\Factory as Http;
+use Illuminate\Http\Client\Factory as HttpFactory;
 use JoBins\Agents\Providers\OpenAI\Endpoints\ResponseHandler;
 use JoBins\Agents\Providers\OpenAI\Endpoints\Responses;
 
@@ -16,7 +16,13 @@ class Client
         public string $url,
         public string|null $apiKey = null,
     ) {
-        $this->http = (new Http())
+        // Use a shared Http Factory from Config so tests can inject fakes
+        $factory = Config::getHttp();
+        if (!$factory instanceof HttpFactory) {
+            $factory = new HttpFactory();
+        }
+
+        $this->http = $factory
             ->baseUrl($this->url)
             ->withToken(Config::getApiKey());
 

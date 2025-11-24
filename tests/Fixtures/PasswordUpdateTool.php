@@ -15,7 +15,8 @@ class PasswordUpdateTool extends Tool
     /**
      * @param PasswordUpdateSchema $schema
      */
-    function handle($schema): array|Response {
-
+    function handle($schema): array|Response
+    {
+        return [];
     }
 }
