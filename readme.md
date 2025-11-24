@@ -1,4 +1,16 @@
+> ⚠️ This package is in an early development phase. Feedback and contributions are welcome.
+
 # OpenAI Agents PHP
+OpenAI Agents PHP is a lightweight SDK for building AI agents and tool-driven workflows in PHP.
+It provides a simple architecture for defining agents, attaching custom tools, validating structured inputs with schemas, and executing conversations powered by OpenAI models.
+
+### Features
+- [x] Agent
+- [x] Runner
+- [ ] Tools: WIP
+- [ ] Structure Response: WIP
+- [ ] Json Schema: WIP
+- [ ] Memory
 
 ### Getting Started
 ```php
@@ -16,56 +28,59 @@ $agent = \JoBins\Agents\Agent(
 \JoBins\Agents\Runner::run($agent, "Hello");
 ```
 
-### Tools
+### Basic Usage
 
 ```php
 use JoBins\Agents\Agents\Agent;
 
-class CustomerFacingAgent extends Agent
+class JoBinsAgent extends Agent
 {
-    public static function create(): CustomerFacingAgent
-    {
-        return new self(
-            name: "Customer Facing Agent",
-            instructions: <<<'TEXT'
-                Handle all direct user communication. 
-                Call the relevant tools when specialized expertise is needed.
-                TEXT,
-            tools: [
-                BookingTool::class,
-                RefundTool::class
-            ]
-        );
-    }
+    public string $name = "JoBins Agent";
+
+    public ?string $instructions = <<<'TEXT'
+                       Handle all direct user communication. 
+                       Call the relevant tools when specialized expertise is needed.
+                       TEXT;
+
+    public array $tools = [
+        PasswordUpdateTool::class,
+        UserCreateTool::class
+    ];
 }
 ```
 
 Define the Schema
 
 ```php
-class RefundSchema extends Schema
+class UserCreateSchema extends Schema
 {
-    #[Field(description: "The name of the person to refund.", format: 'email', minLength: 1, maxLength: 100)]
+    #[Field(description: "Fullname of the user")]
+    #[Size(min: 1, max: 50)]
     public string $name;
 
-    #[Field(description: "The number of items to refund.")]
-    public ?int $count;
+    #[Field(description: "Email of the person")]
+    #[Format('email')]
+    public ?int $email;
+
+    #[Field(description: "Password")]
+    #[Size(min: 1, max: 50)]
+    public string $password;
 }
 ```
 
 Attach the schema in the tool
-```php
 
-class RefundTool
+```php
+class UserCreateTool extends Tool
 {
     function schema(): string
     {
-        return RefundSchema::class;
+        return UserCreateSchema::class;
     }
 
-    function handle(RefundSchema $schema): array|Response
-    {
-
-    }
+    /**
+     * @param UserCreateSchema $schema
+     */
+    function handle($schema): array|Response {}
 }
 ```

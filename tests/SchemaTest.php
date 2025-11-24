@@ -2,7 +2,7 @@
 
 namespace JoBins\Agents\Test;
 
-use JoBins\Agents\Test\Fixtures\RefundSchema;
+use JoBins\Agents\Test\Fixtures\UserCreateSchema;
 use PHPUnit\Framework\TestCase;
 
 class SchemaTest extends TestCase
@@ -30,6 +30,6 @@ class SchemaTest extends TestCase
             'required' => ['name'],
         ];
 
-        $this->assertEquals($expected, RefundSchema::toJsonSchema());
+        $this->assertEquals($expected, UserCreateSchema::toJsonSchema());
     }
 }

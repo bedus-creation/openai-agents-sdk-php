@@ -2,12 +2,11 @@
 
 namespace JoBins\Agents\Schema;
 
-use JoBins\Agents\Attributes\Field;
 use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionProperty;
 
-class Schema
+class Schema implements SchemaInterface
 {
     public static function toJsonSchema(): array
     {
@@ -22,7 +21,8 @@ class Schema
 
         foreach ($properties as $property) {
             $type = self::getPropertyType($property);
-            $attributes = $property->getAttributes(Field::class);
+            $attributes = $property->getAttributes();
+            dd($type, $attributes[0]->newInstance());
 
             $fieldSchema = ['type' => $type];
 
