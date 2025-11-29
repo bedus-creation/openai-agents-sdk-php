@@ -9,7 +9,7 @@ It provides a simple architecture for defining agents, attaching custom tools, v
 - [x] Runner
 - [ ] Tools: WIP
 - [ ] Structure Response: WIP
-- [ ] Json Schema: WIP
+- [x] Json Schema
 - [ ] Memory
 
 ### Getting Started

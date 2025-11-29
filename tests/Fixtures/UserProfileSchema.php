@@ -12,4 +12,6 @@ class UserProfileSchema extends Schema
 
     #[Field(description: "Personal website URL")]
     public ?string $website;
+
+    public ArraySchema $users;
 }
