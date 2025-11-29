@@ -4,6 +4,7 @@ namespace JoBins\Agents\Test;
 
 use Illuminate\JsonSchema\Serializer;
 use JoBins\Agents\Test\Fixtures\AgeSchema;
+use JoBins\Agents\Test\Fixtures\ArraySchema;
 use JoBins\Agents\Test\Fixtures\PasswordUpdateSchema;
 use JoBins\Agents\Test\Fixtures\StatusEnumSchema;
 use JoBins\Agents\Test\Fixtures\UserCreateSchema;
@@ -81,9 +82,9 @@ class SchemaTest extends TestCase
     {
         $schema = Serializer::serialize(UserProfileSchema::getProperties());
 
-        $this->assertEquals(['address'], $schema['required']);
+        $this->assertEquals(['address', 'users'], $schema['required']);
         $this->assertSame('object', $schema['properties']['address']['type']);
-        $this->assertSame(['street', 'city', 'country'], $schema['properties']['address']['required']);
+        $this->assertSame(['street', 'city', 'country', 'color'], $schema['properties']['address']['required']);
         $this->assertSame('Street address', $schema['properties']['address']['properties']['street']['description']);
         $this->assertSame(['US', 'CA'], $schema['properties']['address']['properties']['country']['enum']);
         $this->assertNotContains('website', $schema['required']);
@@ -98,5 +99,24 @@ class SchemaTest extends TestCase
         $this->assertSame(['pending', 'active', 'disabled'], $schema['properties']['status']['enum']);
         $this->assertSame(['status', 'priority'], $schema['required']);
         $this->assertSame(['integer', [1, 2, 3]], [$schema['properties']['priority']['type'], $schema['properties']['priority']['enum']]);
+    }
+
+    #[Test]
+    public function test_array_fields_set_item_schema()
+    {
+        $schema = Serializer::serialize(ArraySchema::getProperties());
+
+        $this->assertSame(['quantities', 'colors', 'addresses'], $schema['required']);
+
+        $this->assertSame('array', $schema['properties']['quantities']['type']);
+        $this->assertSame('integer', $schema['properties']['quantities']['items']['type']);
+        $this->assertSame('List of quantities', $schema['properties']['quantities']['description']);
+
+        $this->assertSame(['red', 'green', 'blue'], $schema['properties']['colors']['items']['enum']);
+        $this->assertSame('array', $schema['properties']['colors']['type']);
+
+        $this->assertSame('array', $schema['properties']['addresses']['type']);
+        $this->assertSame('object', $schema['properties']['addresses']['items']['type']);
+        $this->assertSame('Street address', $schema['properties']['addresses']['items']['properties']['street']['description']);
     }
 }

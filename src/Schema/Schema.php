@@ -2,10 +2,14 @@
 
 namespace JoBins\Agents\Schema;
 
-use Illuminate\JsonSchema\Types\ObjectType;
+use Illuminate\JsonSchema\Types\ArrayType;
+use Illuminate\JsonSchema\Types\BooleanType;
 use Illuminate\JsonSchema\Types\IntegerType;
+use Illuminate\JsonSchema\Types\ObjectType;
+use Illuminate\JsonSchema\Types\NumberType;
 use Illuminate\JsonSchema\Types\StringType;
 use Illuminate\JsonSchema\Types\Type;
+use JoBins\Agents\Schema\Parsers\EnumParser;
 use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionProperty;
@@ -54,33 +58,62 @@ class Schema implements SchemaInterface
             return 'string';
         }
 
-        $typeName = $type->getName();
+        $typeName = self::normalizeTypeName($type->getName());
 
+        if ($typeName === 'array') {
+            return 'array';
+        }
+
+        return self::resolveType($typeName);
+    }
+
+    protected static function resolveType(string $typeName): string|Type
+    {
         if (is_subclass_of($typeName, Schema::class)) {
             return $typeName::getProperties();
         }
 
         if (enum_exists($typeName)) {
-            $cases = $typeName::cases();
-
-            if (is_subclass_of($typeName, \BackedEnum::class)) {
-                $values = array_map(fn (\BackedEnum $case) => $case->value, $cases);
-                $typeInstance = is_string($values[0]) ? new StringType() : new IntegerType();
-            } else {
-                $values = array_map(fn (\UnitEnum $case) => $case->name, $cases);
-                $typeInstance = new StringType();
-            }
-
-            $typeInstance->enum($values);
-
-            return $typeInstance;
+            return EnumParser::parse($typeName);
         }
 
         return match ($typeName) {
+            'integer', 'boolean', 'number', 'string' => $typeName,
+            default => 'string',
+        };
+    }
+
+    /**
+     * Normalize primitive aliases to json-schema names.
+     */
+    protected static function normalizeTypeName(string $typeName): string
+    {
+        return match ($typeName) {
             'int' => 'integer',
             'bool' => 'boolean',
-            'float' => 'number',
-            default => 'string',
+            'float', 'double' => 'number',
+            default => $typeName,
+        };
+    }
+
+    /**
+     * Convert a type name or class string to a JsonSchema Type instance.
+     */
+    public static function makeType(string $typeName): Type
+    {
+        $typeName = self::normalizeTypeName($typeName);
+        $resolved = self::resolveType($typeName);
+
+        if ($resolved instanceof Type) {
+            return $resolved;
+        }
+
+        return match ($resolved) {
+            'integer' => new IntegerType(),
+            'boolean' => new BooleanType(),
+            'number' => new NumberType(),
+            'array' => new ArrayType(),
+            default => new StringType(),
         };
     }
 }

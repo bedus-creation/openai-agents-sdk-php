@@ -5,6 +5,7 @@ namespace JoBins\Agents\Schema;
 use JoBins\Agents\Schema\Parsers\IntegerParser;
 use JoBins\Agents\Schema\Parsers\TypePassthroughParser;
 use JoBins\Agents\Schema\Parsers\StringParser;
+use JoBins\Agents\Schema\Parsers\ArrayParser;
 use Illuminate\JsonSchema\Types\Type;
 
 class AttributerParser
@@ -20,7 +21,9 @@ class AttributerParser
             ? new TypePassthroughParser($this->type)
             : match ($this->type) {
                 'string' => new StringParser(),
-                'integer' => new IntegerParser()
+                'integer' => new IntegerParser(),
+                'array' => new ArrayParser(),
+                default => new TypePassthroughParser(Schema::makeType($this->type)),
             };
 
         foreach ($this->attributes as $attribute) {
