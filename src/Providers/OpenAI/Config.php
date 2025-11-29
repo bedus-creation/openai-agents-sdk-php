@@ -2,6 +2,7 @@
 
 namespace JoBins\Agents\Providers\OpenAI;
 
+use Illuminate\Http\Client\Factory as HttpFactory;
 use JoBins\Agents\Models\Model;
 use JoBins\Agents\Models\OpenAIResponsesModel;
 
@@ -14,6 +15,11 @@ class Config
     protected static bool $useResponseByDefault = true;
 
     protected static string $defaultModel = "gpt-5.1";
+
+    /**
+     * Shared HTTP factory for the OpenAI client, useful for tests to inject fakes.
+     */
+    protected static ?HttpFactory $http = null;
 
     public static function getApiKey(): ?string
     {
@@ -38,5 +44,21 @@ class Config
     public static function getModel(?string $model): Model
     {
         return new OpenAIResponsesModel(model: $model, client: self::getClient());
+    }
+
+    /**
+     * Inject a shared HTTP client factory (for testing/mocking).
+     */
+    public static function setHttp(?HttpFactory $http): void
+    {
+        self::$http = $http;
+    }
+
+    /**
+     * Get the shared HTTP client factory if set.
+     */
+    public static function getHttp(): ?HttpFactory
+    {
+        return self::$http;
     }
 }

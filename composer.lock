@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ac45ccad4df63fee5a92f575761aae2e",
+    "content-hash": "4789c464a741ea5619153dc15f767a9b",
     "packages": [
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -990,6 +990,52 @@
                 "source": "https://github.com/laravel/framework"
             },
             "time": "2025-11-18T14:42:35+00:00"
+        },
+        {
+            "name": "illuminate/json-schema",
+            "version": "v12.39.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminate/json-schema.git",
+                "reference": "c2b383a6dd66f41208f1443801fe01934c63d030"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminate/json-schema/zipball/c2b383a6dd66f41208f1443801fe01934c63d030",
+                "reference": "c2b383a6dd66f41208f1443801fe01934c63d030",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "12.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Illuminate\\JsonSchema\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                }
+            ],
+            "description": "The Illuminate Json Schema package.",
+            "homepage": "https://laravel.com",
+            "support": {
+                "issues": "https://github.com/laravel/framework/issues",
+                "source": "https://github.com/laravel/framework"
+            },
+            "time": "2025-11-03T22:27:03+00:00"
         },
         {
             "name": "illuminate/macroable",
